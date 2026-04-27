@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Awakening Ceremony{% endblock %}
+
+{% block content %}
+<div class="onboarding-container">
+    <div class="progress-bar-container">
+        <div class="progress-bar" id="wizard-progress"></div>
+    </div>
+
+    <form id="onboarding-form" class="wizard-form glass-panel">
+        
+        <!-- Step 1 -->
+        <div class="wizard-step active" id="step-1">
+            <h2>Select Your Class</h2>
+            <p>What is your current phase in the physical realm?</p>
+            <div class="options-grid">
+                <label class="option-card">
+                    <input type="radio" name="user_type" value="High School Student">
+                    <div class="card-content">🎒 Novice (School)</div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="user_type" value="College Student">
+                    <div class="card-content">🎓 Apprentice (College)</div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="user_type" value="Job Seeker / Graduate">
+                    <div class="card-content">⚔️ Mercenary (Graduate)</div>
+                </label>
+                <label class="option-card">
+                    <input type="radio" name="user_type" value="Working Professional">
+                    <div class="card-content">🛡️ Hunter (Professional)</div>
+                </label>
+            </div>
+            <button type="button" class="btn next-btn">Next Step</button>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="wizard-step" id="step-2">
+            <h2>Define Your Quest</h2>
+            <p>What is the ultimate prize you seek?</p>
+            <div class="options-grid">
+                <label class="option-card"><input type="radio" name="primary_goal" value="Crack a high-paying job"><div class="card-content">💰 Epic Loot (Top Job)</div></label>
+                <label class="option-card"><input type="radio" name="primary_goal" value="Clear competitive exams"><div class="card-content">📜 Ancient Scroll (Exams)</div></label>
+                <label class="option-card"><input type="radio" name="primary_goal" value="Master a difficult skill"><div class="card-content">🧠 Ascended Skill</div></label>
+                <label class="option-card"><input type="radio" name="primary_goal" value="Build a strong physique"><div class="card-content">💪 Titan's Body</div></label>
+            </div>
+            <button type="button" class="btn next-btn">Next Step</button>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="wizard-step" id="step-3">
+            <h2>Name Your Demon</h2>
+            <p>What shadow currently holds you back?</p>
+            <div class="options-grid">
+                <label class="option-card"><input type="radio" name="pain_point" value="Doomscrolling and Social Media"><div class="card-content">📱 The Scroll Curse</div></label>
+                <label class="option-card"><input type="radio" name="pain_point" value="Lack of consistency"><div class="card-content">⏳ Fragmented Will</div></label>
+                <label class="option-card"><input type="radio" name="pain_point" value="Burnout and poor sleep"><div class="card-content">🌑 Vitality Drain</div></label>
+                <label class="option-card"><input type="radio" name="pain_point" value="Imposter syndrome/Anxiety"><div class="card-content">👻 Mind Illusions</div></label>
+            </div>
+            <button type="button" class="btn next-btn">Next Step</button>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="wizard-step" id="step-4">
+            <h2>Your Combat Style</h2>
+            <p>What motivates you to fight?</p>
+            <div class="options-grid">
+                <label class="option-card"><input type="radio" name="motivation_style" value="Competition"><div class="card-content">To be better than others</div></label>
+                <label class="option-card"><input type="radio" name="motivation_style" value="Growth"><div class="card-content">To see my own progress</div></label>
+                <label class="option-card"><input type="radio" name="motivation_style" value="Fear"><div class="card-content">Fear of failure</div></label>
+            </div>
+            <button type="button" class="btn next-btn">Next Step</button>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="wizard-step" id="step-5">
+            <h2>Daily Power Window</h2>
+            <p>How many free hours do you have daily to train?</p>
+            <div class="slider-container">
+                <input type="range" name="available_hours" min="1" max="16" value="4" class="neon-slider" id="hours-slider">
+                <span class="slider-val" id="hours-val">4 Hours</span>
+            </div>
+            <button type="button" class="btn submit-btn" id="finish-onboarding">Awaken</button>
+        </div>
+
+    </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/onboarding.js') }}"></script>
+{% endblock %}

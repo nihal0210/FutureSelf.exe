@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Shadow Slayer{% endblock %}</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="particle-container"></div>
+    
+    {% if session.get('user_id') %}
+    <nav class="glass-nav">
+        <div class="nav-brand">SHADOW SLAYER</div>
+        <div class="nav-links">
+            <a href="{{ url_for('dashboard.index') }}" class="nav-item">Dashboard</a>
+            <a href="{{ url_for('dashboard.history') }}" class="nav-item">Chronicle</a>
+            <a href="{{ url_for('auth.logout') }}" class="nav-item logout">Logout</a>
+        </div>
+    </nav>
+    {% endif %}
+
+    <main class="container">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Global JS -->
+    <script>
+        // Simple particle effect
+        const container = document.getElementById('particle-container');
+        for(let i=0; i<50; i++) {
+            let p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + 'vw';
+            p.style.animationDuration = (Math.random() * 10 + 5) + 's';
+            p.style.animationDelay = (Math.random() * 5) + 's';
+            container.appendChild(p);
+        }
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

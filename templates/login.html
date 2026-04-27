@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Shadow Slayer - Awaken{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="login-card glass-panel">
+        <div class="portal-effect"></div>
+        <h1 class="glitch-text" data-text="SHADOW SLAYER">SHADOW SLAYER</h1>
+        <p class="subtitle">Your future is not decided. It is earned.</p>
+        
+        <div class="stats-preview">
+            <div class="rank-badge decorative">S</div>
+            <div class="rank-badge decorative delay-1">A</div>
+            <div class="rank-badge decorative delay-2">B</div>
+        </div>
+
+        <a href="{{ url_for('auth.login') }}" class="google-btn">
+            <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google Logo">
+            <span>Enter the System</span>
+        </a>
+    </div>
+</div>
+{% endblock %}

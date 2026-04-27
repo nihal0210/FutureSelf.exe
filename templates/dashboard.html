@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}Player Status - Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-grid">
+    
+    <!-- Top HUD -->
+    <div class="hud-panel glass-panel">
+        <div class="profile-section">
+            <img src="{{ user.avatar_url or 'https://ui-avatars.com/api/?name=' + user.name }}" class="avatar">
+            <div class="user-info">
+                <h2>{{ user.name }}</h2>
+                <div class="level-badge">LVL {{ user.level }}</div>
+            </div>
+        </div>
+        
+        <div class="rank-section">
+            <div class="rank-display {{ user.rank|lower }}-rank">
+                RANK <span class="rank-letter">{{ user.rank }}</span>
+            </div>
+        </div>
+
+        <div class="stats-section">
+            <div class="xp-bar-container">
+                <div class="xp-text">XP: {{ user.xp }}</div>
+            </div>
+            <div class="streak-badge">🔥 {{ user.streak }} Day Streak</div>
+        </div>
+    </div>
+
+    <div class="main-content-grid">
+        <!-- Left Col: Input & Stats -->
+        <div class="left-col">
+            <div class="glass-panel input-panel">
+                <h3>Daily Training Log</h3>
+                <form id="habit-form">
+                    <div class="input-group">
+                        <label>Deep Work / Study (Hours): <span id="study-val">0</span></label>
+                        <input type="range" id="study_hours" min="0" max="14" step="0.5" value="{{ today_habit.study_hours if today_habit else 0 }}">
+                    </div>
+                    <div class="input-group">
+                        <label>Sleep Recovery (Hours): <span id="sleep-val">0</span></label>
+                        <input type="range" id="sleep_hours" min="0" max="12" step="0.5" value="{{ today_habit.sleep_hours if today_habit else 0 }}">
+                    </div>
+                    <div class="input-group">
+                        <label>Exercise (Mins): <span id="exercise-val">0</span></label>
+                        <input type="range" id="exercise_mins" min="0" max="180" step="10" value="{{ today_habit.exercise_mins if today_habit else 0 }}">
+                    </div>
+                    <div class="input-group">
+                        <label>Screen Time / Doomscrolling (Hours): <span id="screen-val">0</span></label>
+                        <input type="range" id="screen_time" min="0" max="16" step="0.5" value="{{ today_habit.screen_time if today_habit else 0 }}">
+                    </div>
+                    <div class="input-group">
+                        <label>Task Difficulty/Skill Level (1-10): <span id="skill-val">1</span></label>
+                        <input type="range" id="skill_level" min="1" max="10" step="1" value="{{ today_habit.skill_level if today_habit else 1 }}">
+                    </div>
+                    <button type="button" id="submit-habit-btn" class="btn submit-btn neon-pulse">Record Stats</button>
+                </form>
+            </div>
+
+            <!-- Stats Rings -->
+            <div class="glass-panel stats-rings-panel">
+                <h3>Current Status</h3>
+                <div class="rings-container">
+                    <div class="stat-ring" id="str-ring">
+                        <div class="ring-circle"></div>
+                        <span>STR</span>
+                        <div class="stat-val">{{ today_habit.strength_score|round(1) if today_habit else 0 }}</div>
+                    </div>
+                    <div class="stat-ring" id="vit-ring">
+                        <div class="ring-circle"></div>
+                        <span>VIT</span>
+                        <div class="stat-val">{{ today_habit.vitality_score|round(1) if today_habit else 0 }}</div>
+                    </div>
+                    <div class="stat-ring" id="int-ring">
+                        <div class="ring-circle"></div>
+                        <span>INT</span>
+                        <div class="stat-val">{{ today_habit.intelligence_score|round(1) if today_habit else 0 }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Col: AI & Quests -->
+        <div class="right-col">
+            <!-- Shadow Advisor -->
+            <div class="glass-panel advisor-panel dark-glow">
+                <h3>Shadow Advisor</h3>
+                <div id="ai-advice-content" class="typewriter-text">
+                    {% if today_habit and today_habit.ai_advice %}
+                        {{ today_habit.ai_advice }}
+                    {% else %}
+                        Submit your daily stats to receive guidance.
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Quests -->
+            <div class="glass-panel quests-panel">
+                <div class="quest-header">
+                    <h3>Active Quests</h3>
+                    <button id="refresh-quests" class="icon-btn">🔄 Refresh</button>
+                </div>
+                <div id="quest-list">
+                    {% for quest in active_quests %}
+                    <div class="quest-card" id="quest-{{ quest.id }}">
+                        <div class="quest-badge diff-{{ quest.difficulty }}">{{ quest.difficulty|upper }}</div>
+                        <h4>{{ quest.title }}</h4>
+                        <p>{{ quest.description }}</p>
+                        <div class="quest-footer">
+                            <span class="xp-reward">+{{ quest.xp_reward }} XP</span>
+                            <button class="btn sm-btn complete-quest-btn" data-id="{{ quest.id }}">Complete</button>
+                        </div>
+                    </div>
+                    {% else %}
+                    <p class="empty-text">No active quests. Refresh to generate.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Future Vision -->
+            <div class="glass-panel vision-panel">
+                <h3>Future Vision</h3>
+                <div class="timeline">
+                    {% set predictions = {} %}
+                    {% if today_habit and today_habit.ai_prediction %}
+                        {% set predictions = today_habit.ai_prediction|string|fromjson %}
+                    {% endif %}
+                    
+                    <div class="timeline-item">
+                        <div class="time-label">1 Month</div>
+                        <div class="vision-text" id="pred-1m">{{ predictions.get('1_month', 'Waiting for data...') }}</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time-label">6 Months</div>
+                        <div class="vision-text" id="pred-6m">{{ predictions.get('6_months', 'Waiting for data...') }}</div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="time-label">1 Year</div>
+                        <div class="vision-text" id="pred-1y">{{ predictions.get('1_year', 'Waiting for data...') }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Level Up Modal -->
+<div id="level-up-modal" class="modal hidden">
+    <div class="modal-content glass-panel s-rank-glow">
+        <h2 class="glitch-text" data-text="LEVEL UP">LEVEL UP</h2>
+        <div class="new-level-display">Level <span id="new-level-num"></span></div>
+        <p>Your power grows.</p>
+        <button class="btn" onclick="document.getElementById('level-up-modal').classList.add('hidden')">Continue</button>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}
