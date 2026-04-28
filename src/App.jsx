@@ -371,7 +371,7 @@ const CSS = `
     0% { opacity: 1; }
     100% { opacity: 0; }
   }
-\`;
+`;
 
 // ── QUESTIONS ──
 const QUESTIONS = [
@@ -558,26 +558,26 @@ export default function ShadowSlayer() {
 
   async function fetchAI(s) {
     const personaCtx = persona
-      ? \`User is a \${persona.user_type} whose goal is \${persona.primary_goal}. Pain point: \${persona.pain_point}. Available hours: \${persona.available_hours}. Motivation: \${persona.motivation_style}.\`
+      ? `User is a ${persona.user_type} whose goal is ${persona.primary_goal}. Pain point: ${persona.pain_point}. Available hours: ${persona.available_hours}. Motivation: ${persona.motivation_style}.`
       : "";
 
-    const prompt = \`You are the Shadow Advisor — an elite AI life coach inside a Solo Leveling RPG game called Shadow Slayer.
+    const prompt = `You are the Shadow Advisor — an elite AI life coach inside a Solo Leveling RPG game called Shadow Slayer.
 
-\${personaCtx}
+${personaCtx}
 
 Today's stats:
-- Strength (Career): \${s.str}/100
-- Vitality (Health): \${s.vit}/100
-- Intelligence (Productivity): \${s.intel}/100
-- Overall Score: \${s.overall}/100
-- Rank: \${getRank(s.overall)}
+- Strength (Career): ${s.str}/100
+- Vitality (Health): ${s.vit}/100
+- Intelligence (Productivity): ${s.intel}/100
+- Overall Score: ${s.overall}/100
+- Rank: ${getRank(s.overall)}
 
 Habits logged:
-- Study: \${habits.study}h
-- Sleep: \${habits.sleep}h
-- Screen time: \${habits.screen}h
-- Exercise: \${habits.exercise} mins
-- Skill level: \${habits.skill}/10
+- Study: ${habits.study}h
+- Sleep: ${habits.sleep}h
+- Screen time: ${habits.screen}h
+- Exercise: ${habits.exercise} mins
+- Skill level: ${habits.skill}/10
 
 Respond ONLY in this exact JSON format:
 {
@@ -593,7 +593,7 @@ Respond ONLY in this exact JSON format:
 
 For predictions, be SPECIFIC to the persona's goal. Use exact numbers (LPA, rank, etc). Make them feel real and earned.
 Tags should be 1-2 word status indicators from these options: RISING, GRINDING, BURNOUT RISK, PEAK STATE, DANGER ZONE, ON TRACK, UNSTOPPABLE, NEEDS REST, FOCUS MODE, ACCELERATING.
-Only return JSON, no other text.\`;
+Only return JSON, no other text.`;
 
     try {
       const res = await fetch("https://api.anthropic.com/v1/messages", {
@@ -607,7 +607,7 @@ Only return JSON, no other text.\`;
       });
       const data = await res.json();
       const text = data.content?.map((c) => c.text || "").join("") || "";
-      const clean = text.replace(/\`\`\`json|\`\`\`/g, "").trim();
+      const clean = text.replace(/```json|```/g, "").trim();
       const parsed = JSON.parse(clean);
       setPredictions(parsed.predictions || []);
       setAdvisor(parsed.advisor || "");
@@ -670,7 +670,7 @@ Only return JSON, no other text.\`;
           <div className="onboard-card">
             <div className="step-indicator">
               {QUESTIONS.map((_, i) => (
-                <div key={i} className={\`step-dot \${i < step ? "done" : i === step ? "active" : ""}\`} />
+                <div key={i} className={`step-dot ${i < step ? "done" : i === step ? "active" : ""}`} />
               ))}
             </div>
             <div className="q-label">// {currentQ.label}</div>
@@ -679,7 +679,7 @@ Only return JSON, no other text.\`;
               {currentQ.options.map((opt) => (
                 <button
                   key={opt.value}
-                  className={\`option-btn \${answers[currentQ.key] === opt.value ? "selected" : ""}\`}
+                  className={`option-btn ${answers[currentQ.key] === opt.value ? "selected" : ""}`}
                   onClick={() => selectOption(opt.value)}
                 >
                   <span className="option-icon">{opt.icon}</span>
@@ -722,10 +722,10 @@ Only return JSON, no other text.\`;
                 <span>{xp}/{xpToLevel} XP</span>
               </div>
               <div className="xp-track">
-                <div className="xp-fill" style={{ width: \`\${xpPct}%\` }} />
+                <div className="xp-fill" style={{ width: `${xpPct}%` }} />
               </div>
             </div>
-            <div className={\`rank-badge rank-\${rank}\`}>{rank}</div>
+            <div className={`rank-badge rank-${rank}`}>{rank}</div>
           </div>
         </div>
 
@@ -776,21 +776,21 @@ Only return JSON, no other text.\`;
                     <span className="stat-name" style={{ color: "var(--red)" }}>⚔ STRENGTH</span>
                     <span className="stat-value" style={{ color: "var(--red)" }}>{stats.str}</span>
                   </div>
-                  <div className="stat-track"><div className="stat-fill" style={{ width: \`\${stats.str}%\` }} /></div>
+                  <div className="stat-track"><div className="stat-fill" style={{ width: `${stats.str}%` }} /></div>
                 </div>
                 <div className="stat-row stat-VIT">
                   <div className="stat-header">
                     <span className="stat-name" style={{ color: "var(--green)" }}>🛡 VITALITY</span>
                     <span className="stat-value" style={{ color: "var(--green)" }}>{stats.vit}</span>
                   </div>
-                  <div className="stat-track"><div className="stat-fill" style={{ width: \`\${stats.vit}%\` }} /></div>
+                  <div className="stat-track"><div className="stat-fill" style={{ width: `${stats.vit}%` }} /></div>
                 </div>
                 <div className="stat-row stat-INT">
                   <div className="stat-header">
                     <span className="stat-name" style={{ color: "var(--cyan)" }}>🧠 INTELLIGENCE</span>
                     <span className="stat-value" style={{ color: "var(--cyan)" }}>{stats.intel}</span>
                   </div>
-                  <div className="stat-track"><div className="stat-fill" style={{ width: \`\${stats.intel}%\` }} /></div>
+                  <div className="stat-track"><div className="stat-fill" style={{ width: `${stats.intel}%` }} /></div>
                 </div>
                 <div className="overall-score">
                   <div className="score-num">{stats.overall}</div>
@@ -824,7 +824,7 @@ Only return JSON, no other text.\`;
                 <div className="advisor-msg">{advisor}</div>
                 <div>
                   {advisorTags.map((t) => (
-                    <span key={t} className={\`advisor-tag \${tagType(t)}\`}>{t}</span>
+                    <span key={t} className={`advisor-tag ${tagType(t)}`}>{t}</span>
                   ))}
                 </div>
               </>
@@ -885,7 +885,7 @@ Only return JSON, no other text.\`;
             {quest && (
               <div className="quest-card">
                 <div className="quest-title">{quest.title}</div>
-                <div className={\`quest-diff \${quest.diff}\`}>
+                <div className={`quest-diff ${quest.diff}`}>
                   [{quest.diff.toUpperCase()}] · {quest.xp} XP REWARD
                 </div>
                 <div className="quest-desc">{quest.desc}</div>
